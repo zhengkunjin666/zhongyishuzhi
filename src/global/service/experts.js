@@ -5,6 +5,9 @@ const Experts = {
   getExpertList: (params) => {
     return request.get(API.experts, params);
   },
+  getExpertDetail: (id) => {
+    return request.get(`${API.experts}/${id}`);
+  },
   // getCampsDetail: (id) => {
   //   return request.get(`${API.camps}/${id}`);
   // },

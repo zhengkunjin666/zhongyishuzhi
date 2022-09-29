@@ -30,6 +30,9 @@
         <div ref="levelRight" style="height: 430px"></div>
       </div>
     </div>
+    <div class="expert-list-img">
+        <img src="@/assets/images/数据图.png" alt="">
+      </div>
   </section>
 </template>
 
@@ -259,6 +262,13 @@ const levelRightInit = () => {
         margin-right: 0;
       }
     }
+  }
+}
+.expert-list-img {
+  margin-top: 24px;
+  display: flex;
+  img {
+    flex: 1;
   }
 }
 </style>

@@ -31,44 +31,58 @@
             />
           </a-form-item>
           <a-form-item>
-            <a-select
+            <a-input
+              class="expert-select"
+              v-model:value="modelRef.company"
+              placeholder="请输入公司"
+            />
+            <!-- <a-select
               v-model:value="modelRef.company"
               placeholder="请选择公司"
               allowClear
             >
               <a-select-option value="shanghai">Zone one</a-select-option>
               <a-select-option value="beijing">Zone two</a-select-option>
-            </a-select>
+            </a-select> -->
           </a-form-item>
           <a-form-item>
-            <a-select
+            <a-input
+              class="expert-select"
+              v-model:value="modelRef.industry"
+              placeholder="请输入行业"
+            />
+            <!-- <a-select
               v-model:value="modelRef.industry"
               placeholder="请选择行业"
               allowClear
             >
-              <a-select-option value="shanghai">Zone one</a-select-option>
-              <a-select-option value="beijing">Zone two</a-select-option>
-            </a-select>
+            </a-select> -->
           </a-form-item>
           <a-form-item>
-            <a-select
+            <a-input
+              class="expert-select"
+              v-model:value="modelRef.station"
+              placeholder="请输入岗位"
+            />
+            <!-- <a-select
               v-model:value="modelRef.station"
               placeholder="请选择岗位"
               allowClear
             >
-              <a-select-option value="shanghai">Zone one</a-select-option>
-              <a-select-option value="beijing">Zone two</a-select-option>
-            </a-select>
+            </a-select> -->
           </a-form-item>
           <a-form-item>
-            <a-select
+            <a-input
+              class="expert-select"
+              v-model:value="modelRef.major"
+              placeholder="请输入产品领域"
+            />
+            <!-- <a-select
               v-model:value="modelRef.major"
               placeholder="请选择产品领域"
               allowClear
             >
-              <a-select-option value="shanghai">Zone one</a-select-option>
-              <a-select-option value="beijing">Zone two</a-select-option>
-            </a-select>
+            </a-select> -->
           </a-form-item>
           <a-form-item>
             <a-button type="primary" @click.prevent="handleSubmit"
@@ -88,7 +102,6 @@
           :row-key="(record) => record.id"
           :data-source="data.experts"
           :pagination="data.pagination"
-          show-quick-jumper
           :loading="loading"
           @change="handleTableChange"
         >
@@ -116,6 +129,8 @@ const modelRef = reactive({
   industry: null,
   station: null,
   major: null,
+  page: null,
+  page_size: 10,
 });
 const data = reactive({
   experts: [],
@@ -138,12 +153,12 @@ const columns = [
     title: "公司",
     dataIndex: "company",
     width: "10%",
-    ellipsis: true,
   },
   {
     title: "行业",
     dataIndex: "industry",
-    width: "10%",
+    // width: "10%",
+    ellipsis: true,
   },
   {
     title: "岗位",
@@ -153,7 +168,7 @@ const columns = [
   {
     title: "产品领域",
     dataIndex: "major",
-    width: "10%",
+    ellipsis: true,
   },
   {
     title: "岗位技能等级",
@@ -163,17 +178,17 @@ const columns = [
   {
     title: "总技能力",
     dataIndex: "stack_value",
-    width: "10%",
+    width: "8%",
   },
   {
     title: "测评技能数",
     dataIndex: "stacks_count",
-    width: "10%",
+    width: "8%",
   },
   {
     title: "操作",
     dataIndex: "operate",
-    width: "10%",
+    width: "5%",
   },
 ];
 onMounted(() => {
@@ -189,7 +204,9 @@ const getExperts = () => {
     const total = res.data.pagination.total;
     const current = res.data.pagination.current_page;
     const pageSize = res.data.pagination.per_page;
-    data.pagination = { total, current, pageSize };
+    const showQuickJumper = true;
+    const showSizeChanger = true;
+    data.pagination = { total, current, pageSize, showQuickJumper, showSizeChanger };
     loading.value = false;
   });
 };
@@ -230,6 +247,13 @@ const transData = (columns, tableList) => {
     });
 	return [ obj.titles, ...tableBody ];
 };
+const handleTableChange = (params) => {
+  modelRef.page =  params.current;
+  modelRef.page_size =  params.pageSize;
+  data.pagination.current = params.current;
+  data.pagination.pageSize = params.pageSize;
+  getExperts();
+}
 </script>
 
 <style lang="less" scoped>
@@ -257,7 +281,7 @@ const transData = (columns, tableList) => {
       .expert-input {
         width: 122px;
       }
-      .ant-form-item-control-input-content .ant-select {
+      .expert-select {
         width: 160px;
       }
     }
@@ -270,6 +294,9 @@ const transData = (columns, tableList) => {
     margin-top: 16px;
     :deep(.ant-table-cell) {
       white-space: nowrap;
+    }
+    :deep(.ant-table-pagination.ant-pagination) {
+      margin: 24px 0px 0px 0px;
     }
   }
 }

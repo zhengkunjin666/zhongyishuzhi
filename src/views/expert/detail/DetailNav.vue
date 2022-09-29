@@ -103,7 +103,7 @@ onMounted(() => {
     }
   };
   .detail-content {
-    padding: 24px;
+    min-width: 870px;
   }
 }
 </style>

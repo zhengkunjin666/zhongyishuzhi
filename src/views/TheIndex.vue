@@ -118,7 +118,7 @@ const subMenu = ref("layout-sub-menu");
       .banner-title {
         height: 48px;
         font-size: 40px;
-        font-family: AlibabaPuHuiTiB;
+        font-family: PingFangSC-Regular, PingFang SC;
         color: #ffffff;
         line-height: 48px;
         margin-bottom: 24px;

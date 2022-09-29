@@ -1,5 +1,5 @@
 <template>
-  <div class="expert-header">
+  <header class="expert-header">
     <div class="header-left">
       <router-link :to="{ path: '/' }" class="index-link">
         <img
@@ -12,8 +12,8 @@
     <div class="header-right">
       <LayoutNav :subMenu="subMenu" />
     </div>
-  </div>
-  <div class="expert-body">
+  </header>
+  <main class="expert-body">
     <div class="expert-aside">
       <a-menu
         v-model:selectedKeys="selectedKeys"
@@ -38,7 +38,7 @@
     <div class="expert-right">
       <router-view />
     </div>
-  </div>
+  </main>
 </template>
 
 <script setup>
@@ -67,7 +67,7 @@ const selectedKeys = computed(() => {
 .expert-header {
   height: 72px;
   background: #fff;
-  border: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
   display: flex;
   align-items: center;
   .header-left {
