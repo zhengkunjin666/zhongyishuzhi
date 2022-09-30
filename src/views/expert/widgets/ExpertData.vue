@@ -6,7 +6,7 @@
   <a-range-picker class="date-picker" v-model:value="value" separator="至">
   </a-range-picker>
   <section class="expert-data">
-    <h2 class="expert-data-title h2-title">数据概览</h2>
+    <h2 class="expert-data-title title">数据概览</h2>
     <div class="expert-data-list">
       <div class="expert-data-item" v-for="item in expertData" :key="item.text">
         <p class="item-count">{{ item.count }}</p>
@@ -21,7 +21,7 @@
     </div>
   </section>
   <section class="expert-level">
-    <h2 class="expert-level-title h2-title">技能水平</h2>
+    <h2 class="expert-level-title title">技能水平</h2>
     <div class="level-list">
       <div class="level-item">
         <div ref="levelLeft" style="height: 430px"></div>
@@ -100,7 +100,7 @@ const levelLeftInit = () => {
       bottom: "7%",
     },
     xAxis: {
-      data: ["了解", "熟悉", "精通", "掌握", "专家"],
+      data: ["了解", "熟悉", "掌握", "精通", "专家"],
       axisLabel: {
         rotate: 45,
       },
@@ -193,6 +193,14 @@ const levelRightInit = () => {
     text-align: center;
   }
 }
+.title {
+  height: 32px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: PingFangSC-Medium, PingFang SC;
+  line-height: 32px;
+  margin-bottom: 16px;
+}
 .expert-data {
   min-width: 830px;
   margin-top: 30px;
@@ -249,7 +257,6 @@ const levelRightInit = () => {
   }
 }
 .expert-level {
-  margin-top: 30px;
   .level-list {
     display: flex;
     .level-item {

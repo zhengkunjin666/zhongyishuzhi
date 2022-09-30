@@ -69,3 +69,9 @@ const hasNavChildren = (route) => {
   return children.some((data) => data.meta && data.meta.nav);
 };
 </script>
+
+<style less="lang" scoped>
+.ant-menu-horizontal > .ant-menu-item-selected a {
+  font-weight: 500;
+}
+</style>

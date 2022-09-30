@@ -17,7 +17,9 @@
       </div>
       <div class="count-item">
         <p class="count-num">
-          <span class="count-num-large">{{ data.detailData.project_count }}</span>
+          <span class="count-num-large">{{
+            data.detailData.project_count
+          }}</span>
           <span class="count-num-text">个</span>
         </p>
         <p class="count-text">参与项目</p>
@@ -27,47 +29,41 @@
       <div calss="base-info">
         <h3 class="base-title">基本信息</h3>
         <div class="base-content">
-          <div class="base-left">
-            <img class="base-avatar" :src="data.detailData.avatar" />
-          </div>
-          <div class="base-right">
-            <div class="base-right-top">
-              <a-row :gutter="60">
-                <a-col :span="12">
-                  <div class="base-name info-name">
+          <a-row :gutter="70">
+            <a-col :span="7">
+              <div class="base-left">
+                <div class="img-container">
+                  <img class="base-avatar" :src="data.detailData.avatar" />
+                </div>
+                <div class="base-info">
+                  <p class="base-name info-name">
                     专家姓名：<span class="base-text info-text">{{
                       data.detailData.name
                     }}</span>
-                  </div>
-                </a-col>
-                <a-col :span="12">
-                  <div class="base-num info-name">
-                    总技能力：<span class="base-text-blue">{{
-                      data.detailData.stack_value
-                    }}</span>
-                  </div>
-                </a-col>
-              </a-row>
-            </div>
-            <div class="base-right-bottom">
-              <a-row :gutter="60">
-                <a-col :span="12">
-                  <div class="base-phone info-name">
+                  </p>
+                  <p class="base-phone info-name">
                     联系方式：<span class="base-text info-text">{{
                       data.detailData.telephone
                     }}</span>
-                  </div>
-                </a-col>
-                <a-col :span="12">
-                  <div class="base-email">
-                    <span class="base-text info-text"
-                      >邮箱-{{ data.detailData.email }}</span
-                    >
-                  </div>
-                </a-col>
-              </a-row>
-            </div>
-          </div>
+                  </p>
+                </div>
+              </div>
+            </a-col>
+            <a-col :span="7">
+              <div class="base-right">
+                <p class="base-num info-name">
+                  总技能力：<span class="base-text-blue">{{
+                    data.detailData.stack_value
+                  }}</span>
+                </p>
+                <p class="base-email info-name">
+                  <span class="base-text info-text"
+                    >邮箱-{{ data.detailData.email }}</span
+                  >
+                </p>
+              </div>
+            </a-col>
+          </a-row>
         </div>
       </div>
       <div calss="education-info">
@@ -186,9 +182,9 @@ const handleClick = () => {
     message.info({
       content: () => "此功能正在建设中",
       style: {
-        marginTop: "70px"
+        marginTop: "70px",
       },
-      duration: 2
+      duration: 2,
     });
     setTimeout(() => {
       timeout = 0;
@@ -202,8 +198,10 @@ const handleClick = () => {
   padding: 24px;
   padding-bottom: 96px;
   position: relative;
+
   .count-section {
     display: flex;
+
     .count-item {
       width: 40%;
       height: 128px;
@@ -214,11 +212,14 @@ const handleClick = () => {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
       &:last-child {
         margin-right: 0;
       }
+
       .count-num {
         margin-bottom: 8px;
+
         .count-num-large {
           height: 48px;
           font-size: 40px;
@@ -227,6 +228,7 @@ const handleClick = () => {
           line-height: 48px;
           margin-right: 8px;
         }
+
         .count-num-text {
           width: 22px;
           height: 24px;
@@ -236,6 +238,7 @@ const handleClick = () => {
           line-height: 24px;
         }
       }
+
       .count-text {
         height: 24px;
         font-size: 16px;
@@ -247,8 +250,10 @@ const handleClick = () => {
       }
     }
   }
+
   .detail-section {
     margin-top: 32px;
+
     .info-name {
       height: 22px;
       font-size: 14px;
@@ -259,9 +264,11 @@ const handleClick = () => {
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .info-text {
       color: rgba(0, 0, 0, 0.65);
     }
+
     .base-title {
       height: 20px;
       font-size: 14px;
@@ -272,34 +279,50 @@ const handleClick = () => {
       margin-top: 24px;
       margin-bottom: 12px;
     }
+
     .base-content {
-      display: flex;
-      align-items: center;
       padding-bottom: 24px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);
       .base-left {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: #fafafa;
-        margin-right: 16px;
-      }
-      .base-right-top {
-        margin-bottom: 10px;
-        .base-text-blue {
-          color: #0484d4;
+        min-width: 300px;
+        display: flex;
+        align-items: center;
+        .img-container {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          background: #fafafa;
+          margin-right: 16px;
+        }
+        .base-name {
+          margin-bottom: 10px;
+        }
+        .base-phone {
+          margin-bottom: 0px;
         }
       }
+      .base-right {
+        min-width: 350px;
+        .base-text-blue {
+          color: #0484d4;
+        };
+        .base-num {
+          margin-bottom: 10px;
+        }
+      }
+
       .base-right-bottom {
         white-space: nowrap;
       }
     }
+
     .education-content {
       padding-bottom: 24px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     }
   }
 }
+
 .apply-section {
   width: 100%;
   height: 72px;
@@ -308,6 +331,7 @@ const handleClick = () => {
   position: absolute;
   bottom: 0;
   left: 0;
+
   .apply-btn {
     float: right;
     margin-top: 16px;

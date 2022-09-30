@@ -163,8 +163,6 @@ const subMenu = ref("layout-sub-menu");
         height: 32px;
         font-size: 16px;
         font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #FFFFFF;
         line-height: 32px;
         margin-bottom: 0;
       }
