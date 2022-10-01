@@ -1,11 +1,18 @@
 <template>
   <a-menu v-model:selectedKeys="filterPath" mode="horizontal">
     <template v-for="route in data.filterRoutes">
-      <a-sub-menu :key="route.path" v-if="hasNavChildren(route)" :popupClassName="subMenu">
+      <a-sub-menu
+        :key="route.path"
+        v-if="hasNavChildren(route)"
+        :popupClassName="subMenu"
+      >
         <template #title>
           {{ route.meta.nav.title }}
         </template>
-        <a-menu-item v-for="router in route.children" :key="`${route.path}/${router.path}`">
+        <a-menu-item
+          v-for="router in route.children"
+          :key="`${route.path}/${router.path}`"
+        >
           <router-link :to="{ path: `${route.path}/${router.path}` }">
             <svg-icon
               v-if="router.meta.nav.svg"
@@ -38,11 +45,17 @@ const subMenu = refProps.subMenu;
 const data = reactive({ filterRoutes: [] });
 const router = useRouter();
 const filterPath = computed(() => {
-  if (router.currentRoute.value.href.includes("expert/detail") || router.currentRoute.value.href.includes("expert/enter")) {
+  if (
+    router.currentRoute.value.href.includes("expert/detail") ||
+    router.currentRoute.value.href.includes("expert/enter")
+  ) {
     return ["/expert/list"];
   }
+  if (router.currentRoute.value.href.includes("project")) {
+    return ["/project"];
+  }
   return [router.currentRoute.value.path];
-})
+});
 onMounted(() => (data.filterRoutes = filterNavigator(routes)));
 const filterNavigator = (node) => {
   let result = [];

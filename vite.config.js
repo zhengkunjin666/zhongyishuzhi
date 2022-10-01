@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import Components from 'unplugin-vue-components/vite';
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
+import Components from "unplugin-vue-components/vite";
+import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 
 import dotenv from "dotenv";
 dotenv.config({ path: "./.env.local" });
@@ -16,7 +16,7 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
-    dedupe: ["vue"]
+    dedupe: ["vue"],
   },
   plugins: [
     vue(),
@@ -25,16 +25,11 @@ export default defineConfig({
     }),
     createSvgIconsPlugin({
       iconDirs: [path.resolve(process.cwd(), "src/assets/icons/svg")],
-      symbolId: "[name]"
-    })
+      symbolId: "[name]",
+    }),
   ],
   css: {
     sourceMap: false,
-    modules: false
-  }
-  // server: {
-  //   open: true,
-  //   host: `admin-test${process.env.VITE_APP_DOMAIN}`,
-  //   port: 8084,
-  // },
+    modules: false,
+  },
 });

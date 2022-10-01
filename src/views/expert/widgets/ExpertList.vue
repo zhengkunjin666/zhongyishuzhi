@@ -19,7 +19,7 @@
           <a-form-item>
             <a-input
               class="expert-input"
-              v-model:value="modelRef.no"
+              v-model:value="modelRef.id"
               placeholder="工号"
             />
           </a-form-item>
@@ -106,8 +106,10 @@
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
-            <template v-if="column.dataIndex  === 'operate'">
-              <router-link :to = "{ path: `/expert/detail/index/${record.id}` }">详情</router-link>
+            <template v-if="column.dataIndex === 'operate'">
+              <router-link :to="{ path: `/expert/detail/index/${record.id}` }"
+                >详情</router-link
+              >
             </template>
           </template>
         </a-table>
@@ -123,7 +125,7 @@ import { reactive, ref, onMounted } from "vue";
 import * as XLSX from "xlsx/xlsx.mjs";
 
 const modelRef = reactive({
-  no: null,
+  id: null,
   name: null,
   company: null,
   industry: null,
@@ -157,7 +159,6 @@ const columns = [
   {
     title: "行业",
     dataIndex: "industry",
-    // width: "10%",
     ellipsis: true,
   },
   {
@@ -197,24 +198,30 @@ onMounted(() => {
 const getExperts = () => {
   loading.value = true;
   const params = { ...modelRef };
-    console.log(params);
   Experts.getExpertList(params).then((res) => {
-    console.log(res);
     data.experts = res.data.list;
     const total = res.data.pagination.total;
     const current = res.data.pagination.current_page;
-    const pageSize = res.data.pagination.per_page;
+    const pageSize = Number(res.data.pagination.per_page);
     const showQuickJumper = true;
     const showSizeChanger = true;
-    data.pagination = { total, current, pageSize, showQuickJumper, showSizeChanger };
+    data.pagination = {
+      total,
+      current,
+      pageSize,
+      showQuickJumper,
+      showSizeChanger,
+    };
     loading.value = false;
   });
 };
 const handleSubmit = () => {
+  modelRef.page = null;
+  modelRef.page_size = 10;
   getExperts();
 };
 const handleReset = () => {
-  modelRef.no = null;
+  modelRef.id = null;
   modelRef.name = null;
   modelRef.company = null;
   modelRef.industry = null;
@@ -222,38 +229,44 @@ const handleReset = () => {
   modelRef.major = null;
 };
 const handleExport = () => {
-  const tableData = transData(columns, data.experts);
+  const params = { ...modelRef };
+  params.page_size = data.pagination.total;
+  Experts.getExpertList(params).then((res) => {
+    const experts = res.data.list;
+    const columnsList = columns.filter((data) => data.dataIndex != "operate");
+    const tableData = transData(columnsList, experts);
     // 将一组 JS 数据数组转换为工作表
     const ws = XLSX.utils.aoa_to_sheet(tableData);
     // 创建 workbook
     const wb = XLSX.utils.book_new();
     // 将 工作表 添加到 workbook
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
     // 将 workbook 写入文件
-    XLSX.writeFile(wb, 'table.xlsx');
-}
+    XLSX.writeFile(wb, "experts.xlsx");
+  });
+};
 const transData = (columns, tableList) => {
-	const obj = columns.reduce((acc, cur) => {
-		if (!acc.titles && !acc.keys) {
-			acc.titles = [];
-			acc.keys = [];
-		}
-		acc.titles.push(cur.title);
-		acc.keys.push(cur.dataIndex);
-		return acc;
-	}, {});
-    const tableBody = tableList.map(item => {
-    	return obj.keys.map(key => item[key]);
-    });
-	return [ obj.titles, ...tableBody ];
+  const obj = columns.reduce((acc, cur) => {
+    if (!acc.titles && !acc.keys) {
+      acc.titles = [];
+      acc.keys = [];
+    }
+    acc.titles.push(cur.title);
+    acc.keys.push(cur.dataIndex);
+    return acc;
+  }, {});
+  const tableBody = tableList.map((item) => {
+    return obj.keys.map((key) => item[key]);
+  });
+  return [obj.titles, ...tableBody];
 };
 const handleTableChange = (params) => {
-  modelRef.page =  params.current;
-  modelRef.page_size =  params.pageSize;
+  modelRef.page = params.current;
+  modelRef.page_size = params.pageSize;
   data.pagination.current = params.current;
-  data.pagination.pageSize = params.pageSize;
+  data.pagination.pageSize = Number(params.pageSize);
   getExperts();
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -300,7 +313,10 @@ const handleTableChange = (params) => {
     }
   }
 }
-:global(.ant-table-content .ant-table-thead > tr > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before) {
+:global(.ant-table-content
+    .ant-table-thead
+    > tr
+    > th:not(:last-child):not(.ant-table-selection-column):not(.ant-table-row-expand-icon-cell):not([colspan])::before) {
   width: 0;
 }
 </style>

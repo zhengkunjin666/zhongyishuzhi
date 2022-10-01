@@ -3,20 +3,22 @@
     <div class="detail-skill-top">
       <div class="skill-expert-container">
         <div class="expert-left">
-          <img src="" alt="">
+          <img :src="data.detailData.avatar" />
         </div>
         <div class="expert-right">
           <p class="expert-name">{{ data.detailData.name }}</p>
-          <p class="expert-skill">总技能力：{{ data.detailData.stack_value }}</p>
+          <p class="expert-skill">
+            总技能力：{{ data.detailData.stack_value }}
+          </p>
         </div>
       </div>
     </div>
     <div class="detail-skill-bottom">
-      <img v-if="id == 1" src="@/assets/images/个人静态图-1.png" alt="">
-      <img v-else-if="id == 2" src="@/assets/images/个人静态图-2.png" alt="">
-      <img v-else-if="id == 3" src="@/assets/images/个人静态图-3.png" alt="">
-      <img v-else-if="id == 4" src="@/assets/images/个人静态图-4.png" alt="">
-      <img v-else src="@/assets/images/个人静态图-5.png" alt="">
+      <img v-if="id == 1" src="@/assets/images/个人静态图-1.png" alt="" />
+      <img v-else-if="id == 2" src="@/assets/images/个人静态图-2.png" alt="" />
+      <img v-else-if="id == 3" src="@/assets/images/个人静态图-3.png" alt="" />
+      <img v-else-if="id == 4" src="@/assets/images/个人静态图-4.png" alt="" />
+      <img v-else src="@/assets/images/个人静态图-5.png" alt="" />
     </div>
   </div>
 </template>
@@ -25,6 +27,7 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Experts from "@/global/service/experts.js";
+import Images from "@/global/image/image.js";
 
 const data = reactive({
   detailData: {},
@@ -35,6 +38,8 @@ onMounted(() => {
   id.value = router.currentRoute.value.params.id;
   Experts.getExpertDetail(id.value).then((res) => {
     data.detailData = res.data;
+    const index = id.value % Images.length;
+    data.detailData.avatar = Images[index];
   });
 });
 </script>
@@ -56,7 +61,7 @@ onMounted(() => {
         border-radius: 50%;
         background: #fafafa;
         margin-right: 16px;
-      };
+      }
       .expert-name {
         height: 28px;
         font-size: 20px;
@@ -64,13 +69,13 @@ onMounted(() => {
         font-weight: 500;
         line-height: 28px;
         margin-bottom: 6px;
-      };
+      }
       .expert-skill {
         height: 20px;
         font-size: 16px;
         font-family: PingFangSC-Medium, PingFang SC;
         font-weight: 500;
-        color: #0484D4;
+        color: #0484d4;
         line-height: 20px;
         margin-bottom: 0px;
       }

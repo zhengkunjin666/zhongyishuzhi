@@ -1,4 +1,3 @@
-import App from "@/App.vue";
 import TheIndex from "@/views/TheIndex.vue";
 import AboutWe from "@/views/AboutWe.vue";
 import ExpertLayout from "@/views/expert/ExpertLayout.vue";
@@ -10,6 +9,7 @@ import DetailIndex from "@/views/expert/detail/DetailIndex.vue";
 import DetailSkill from "@/views/expert/detail/DetailSkill.vue";
 import DetailJoin from "@/views/expert/detail/DetailJoin.vue";
 import ProjectList from "@/views/project/ProjectList.vue";
+import ProjectDetailOrEnter from "@/views/project/widgets/ProjectDetailOrEnter.vue";
 
 export default [
   {
@@ -63,7 +63,7 @@ export default [
       {
         path: "enter",
         name: "ExpertEnter",
-        component: ExpertEnter
+        component: ExpertEnter,
       },
       {
         path: "detail",
@@ -73,26 +73,26 @@ export default [
             path: "index/:id",
             component: DetailIndex,
             meta: {
-              name: "首页"
-            }
+              name: "首页",
+            },
           },
           {
             path: "skill/:id",
             component: DetailSkill,
             meta: {
-              name: "标签信息"
-            }
+              name: "标签信息",
+            },
           },
           {
             path: "join/:id",
             component: DetailJoin,
             meta: {
-              name: "参与项目"
-            }
-          }
-        ]
+              name: "参与项目",
+            },
+          },
+        ],
       },
-    ]
+    ],
   },
   {
     path: "/project",
@@ -103,6 +103,16 @@ export default [
         title: "项目统计",
       },
     },
+  },
+  {
+    path: "/project/detail/:id",
+    name: "projectDetail",
+    component: ProjectDetailOrEnter,
+  },
+  {
+    path: "/project/enter",
+    name: "projectEnter",
+    component: ProjectDetailOrEnter,
   },
   {
     path: "/about",

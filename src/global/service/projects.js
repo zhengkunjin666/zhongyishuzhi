@@ -10,19 +10,7 @@ const Projects = {
   },
   postProject: (params) => {
     return request.post(API.projects, params);
-  }
-  // getCampsDetail: (id) => {
-  //   return request.get(`${API.camps}/${id}`);
-  // },
-  // getPageDetail: (id, pageId) => {
-  //   return request.get(`${API.camps}/${id}/pages/${pageId}`);
-  // },
-  // getProjectsList: ({ page }) => {
-  //   return request.get(API.projects, { page });
-  // },
-  // getProjectsDetail: (id) => {
-  //   return request.get(`${API.projects}/${id}`);
-  // },
+  },
 };
 
 export default Projects;

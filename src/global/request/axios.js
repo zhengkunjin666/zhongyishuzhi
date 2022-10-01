@@ -1,13 +1,13 @@
 import axios from "axios";
-import { message } from 'ant-design-vue';
-import 'ant-design-vue/es/message/style/css';
+import { message } from "ant-design-vue";
+import "ant-design-vue/es/message/style/css";
 // import Cookies from "js-cookie";
 
 const axiosInstance = axios.create();
 axiosInstance.defaults.timeout = 20000;
 
 // 全局错误处理
-const handleErrorRequest = error => {
+const handleErrorRequest = (error) => {
   const { response } = error;
   const status = response ? response.status : 408;
   // const TOKEN = Cookies.get("web_TOKEN");
@@ -39,7 +39,7 @@ const handleErrorRequest = error => {
 };
 
 // 添加一个请求拦截器（ 一般用于鉴权 )
-axiosInstance.interceptors.request.use(config => {
+axiosInstance.interceptors.request.use((config) => {
   // const token = Cookies.get("web_token");
   // if (token) {
   //   config.headers.Authorization = `Bearer ${token}`;
@@ -49,7 +49,7 @@ axiosInstance.interceptors.request.use(config => {
 
 // 添加响应拦截器
 axiosInstance.interceptors.response.use(
-  res => {
+  (res) => {
     switch (true) {
       case !!res.data.error_code:
         message.error(res.data.msg || res.data.message);
@@ -58,7 +58,7 @@ axiosInstance.interceptors.response.use(
         return res.data;
     }
   },
-  error => {
+  (error) => {
     handleErrorRequest(error);
     return Promise.reject(error);
   }
@@ -87,6 +87,5 @@ export default {
   delete(url = "", params = {}, config = {}) {
     const OPTIONS = Object.assign({ params }, config);
     return axiosInstance.delete(url, OPTIONS);
-  }
+  },
 };
-

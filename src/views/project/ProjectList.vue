@@ -1,13 +1,7 @@
 <template>
   <header class="project-header">
     <div class="header-left">
-      <router-link :to="{ path: '/' }" class="index-link">
-        <img
-          src="@/assets/images/logo-light.png"
-          alt="中国移动"
-          class="index-logo"
-        />
-      </router-link>
+      <LayoutHeaderLeft />
     </div>
     <div class="header-right">
       <LayoutNav :subMenu="subMenu" />
@@ -16,19 +10,23 @@
   <main class="project-body">
     <div class="project-container">
       <section class="count-sectiion">
-        <h2 class="count-title h2-title">项目统计</h2>
+        <div class="count-title title">项目统计</div>
         <div class="count-list">
           <div class="count-item">
             <p class="count-text">累计项目</p>
             <p class="count-num">
-              <span class="count-num-large">{{ data.countData.project_count }}</span>
+              <span class="count-num-large">{{
+                data.countData.project_count
+              }}</span>
               <span class="count-num-text">个</span>
             </p>
           </div>
           <div class="count-item">
             <p class="count-text">累计工时</p>
             <p class="count-num">
-              <span class="count-num-large">{{ data.countData.work_count }}</span>
+              <span class="count-num-large">{{
+                data.countData.work_count
+              }}</span>
               <span class="count-num-text">周</span>
             </p>
           </div>
@@ -45,11 +43,13 @@
       </section>
       <section class="list-sectiion">
         <div class="list-top">
-          <h2 class="list-title h2-title">项目列表</h2>
-          <a-button class="expert-btn" type="primary" @click="handleClick(null)">
-            <template #icon><plus-outlined /></template>
-            录入项目
-          </a-button>
+          <span class="list-title title">项目列表</span>
+          <router-link :to="{ path: '/project/enter' }">
+            <a-button class="expert-btn" type="primary">
+              <template #icon><plus-outlined /></template>
+              录入项目
+            </a-button>
+          </router-link>
         </div>
         <div class="list-container">
           <a-table
@@ -62,24 +62,26 @@
             @change="handleTableChange"
           >
             <template #bodyCell="{ column, record }">
-              <template v-if="column.dataIndex  === 'operate'">
-                <a @click="handleClick(record.id)">详情</a>
+              <template v-if="column.dataIndex === 'operate'">
+                <router-link :to="{ path: `/project/detail/${record.id}` }"
+                  >详情</router-link
+                >
               </template>
-              <template v-if="column.dataIndex  === 'period'">
+              <template v-if="column.dataIndex === 'period'">
                 <span>{{ record.period }}周</span>
               </template>
             </template>
           </a-table>
         </div>
-        <modalShow v-model:visible="modalVisible" v-model:id="id" />
       </section>
     </div>
   </main>
 </template>
 
 <script setup>
+import LayoutHeaderLeft from "@/components/LayoutHeaderLeft.vue";
+import LayoutNav from "@/components/LayoutNav.vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
-import modalShow from "./widgets/ProjectDetailOrEnter.vue";
 import { reactive, ref, onMounted } from "vue";
 import Projects from "@/global/service/projects.js";
 
@@ -140,15 +142,15 @@ const columns = [
 ];
 const page = ref(1);
 const page_size = ref(10);
-const modalVisible = ref(false);
-const id = ref(null);
 onMounted(() => {
   getProjects();
 });
 const getProjects = () => {
   loading.value = true;
-  Projects.getProjectList({ page: page.value, page_size: page_size.value }).then((res) => {
-    console.log(res)
+  Projects.getProjectList({
+    page: page.value,
+    page_size: page_size.value,
+  }).then((res) => {
     data.countData = res.data.extra_info;
     data.projects = res.data.list;
     const total = res.data.pagination.total;
@@ -156,20 +158,22 @@ const getProjects = () => {
     const pageSize = Number(res.data.pagination.per_page);
     const showQuickJumper = true;
     const showSizeChanger = true;
-    data.pagination = { total, current, pageSize, showQuickJumper, showSizeChanger };
+    data.pagination = {
+      total,
+      current,
+      pageSize,
+      showQuickJumper,
+      showSizeChanger,
+    };
     loading.value = false;
   });
 };
 const handleTableChange = (params) => {
-  page.value =  params.current;
-  page_size.value =  params.pageSize;
+  page.value = params.current;
+  page_size.value = params.pageSize;
   data.pagination.current = params.current;
   data.pagination.pageSize = Number(params.pageSize);
   getProjects();
-};
-const handleClick = (detailId) => {
-  modalVisible.value = true;
-  id.value = detailId;
 };
 </script>
 
@@ -181,9 +185,6 @@ const handleClick = (detailId) => {
   border-bottom: 1px solid #ebebeb;
   display: flex;
   align-items: center;
-  .header-left {
-    margin-left: 24px;
-  }
   .header-right {
     margin-left: 56px;
     .ant-menu-horizontal {
@@ -199,62 +200,89 @@ const handleClick = (detailId) => {
 .project-container {
   min-width: 1200px;
   padding: 24px;
-  .count-list {
-    display: flex;
-    .count-item {
-      width: 40%;
-      height: 170px;
-      background: #fafafa;
-      border-radius: 2px;
-      margin-right: 24px;
+  .title {
+    font-size: 16px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+  }
+  .count-sectiion {
+    background: #fff;
+    padding: 24px;
+    margin: 0 auto;
+    .count-title {
+      margin-bottom: 24px;
+    }
+    .count-list {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    
-      &:last-child {
-        margin-right: 0;
-      }
-    
-      .count-num {
-        margin-top: 8px;
-        margin-bottom: 0;
-    
-        .count-num-large {
-          height: 48px;
-          font-size: 40px;
-          font-family: DINCondensed-Bold, DINCondensed;
-          font-weight: bold;
-          line-height: 48px;
-          margin-right: 8px;
+      .count-item {
+        width: 40%;
+        height: 170px;
+        background: #fafafa;
+        border-radius: 2px;
+        margin-right: 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        &:last-child {
+          margin-right: 0;
         }
-    
-        .count-num-text {
-          width: 22px;
+
+        .count-num {
+          margin-top: 8px;
+          margin-bottom: 0;
+
+          .count-num-large {
+            height: 48px;
+            font-size: 40px;
+            font-family: DINCondensed-Bold, DINCondensed;
+            font-weight: bold;
+            line-height: 48px;
+            margin-right: 8px;
+          }
+
+          .count-num-text {
+            width: 22px;
+            height: 24px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            line-height: 24px;
+          }
+        }
+
+        .count-text {
           height: 24px;
           font-size: 16px;
           font-family: PingFangSC-Regular, PingFang SC;
           font-weight: 400;
+          color: rgba(0, 0, 0, 0.65);
           line-height: 24px;
+          margin-bottom: 0;
         }
-      }
-    
-      .count-text {
-        height: 24px;
-        font-size: 16px;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: rgba(0, 0, 0, 0.65);
-        line-height: 24px;
-        margin-bottom: 0;
       }
     }
   }
   .list-sectiion {
+    background: #fff;
     margin-top: 24px;
     .list-top {
+      height: 58px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 0 24px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+    }
+    .list-container {
+      padding: 24px;
+      :deep(.ant-table-cell) {
+        white-space: nowrap;
+      }
+      :deep(.ant-table-pagination.ant-pagination) {
+        margin: 24px 0px 0px 0px;
+      }
     }
   }
 }

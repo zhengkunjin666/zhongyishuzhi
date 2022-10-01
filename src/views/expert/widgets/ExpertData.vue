@@ -31,8 +31,8 @@
       </div>
     </div>
     <div class="expert-list-img">
-        <img src="@/assets/images/数据图.png" alt="">
-      </div>
+      <img src="@/assets/images/数据图.png" alt="" />
+    </div>
   </section>
 </template>
 

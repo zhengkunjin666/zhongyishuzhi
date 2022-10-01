@@ -3,11 +3,7 @@
     <div class="index-header">
       <div class="header-left">
         <router-link :to="{ path: '/' }" class="index-link">
-          <img
-            src="@/assets/images/logo.png"
-            alt="中国移动"
-            class="index-logo"
-          />
+          <svg-icon svgClass="index-logo" svgName="indexLogo"></svg-icon>
         </router-link>
       </div>
       <div class="header-right">
@@ -15,7 +11,7 @@
       </div>
     </div>
     <div class="index-banner">
-      <div class="banner-container">
+      <div class="banner-content">
         <h1 class="banner-title">鸿儒系统</h1>
         <p class="banner-text">激发人才动能，赋能千行百业数智化转型</p>
         <router-link :to="{ path: '/about' }" class="banner-btn"
@@ -41,11 +37,11 @@
       <div class="overview-title h2-title">业务总览</div>
       <div class="overview-nav">
         <router-link :to="{ path: '/expert/data' }" class="nav-item">
-          <p class="nav-item-num">360</p>
+          <p class="nav-item-num">{{ data.indexData.expert_count }}</p>
           <p class="nav-item-text">专家团队</p>
         </router-link>
         <router-link :to="{ path: '/project' }" class="nav-item">
-          <p class="nav-item-num">1220</p>
+          <p class="nav-item-num">{{ data.indexData.project_count }}</p>
           <p class="nav-item-text">项目统计</p>
         </router-link>
       </div>
@@ -58,27 +54,41 @@
 
 <script setup>
 import LayoutNav from "@/components/LayoutNav.vue";
-import { ref } from "vue";
+import { ref, reactive, onMounted } from "vue";
+import Index from "@/global/service/index.js";
 
 const subMenu = ref("layout-sub-menu");
+const data = reactive({
+  indexData: {},
+});
+onMounted(() => {
+  Index.getIndex().then((res) => {
+    data.indexData = res.data;
+  });
+});
 </script>
 
 <style lang="less" scoped>
 .index-top {
-  width: 100%;
   min-width: 1184px;
-  min-height: 576px;
+  background: linear-gradient(90deg, #001377 0%, #000078 100%);
   position: relative;
-  background: url(@/assets/images/banner.png) no-repeat center / cover;
   .index-header {
-    min-width: 1184px;
+    width: 100%;
     height: 72px;
     background: rgba(0, 0, 0, 0.45);
     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.08);
     display: flex;
     align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
     .header-left {
       margin-left: 128px;
+      .index-logo {
+        width: 272px;
+        height: 38px;
+      }
     }
     .header-right {
       margin-left: 36px;
@@ -110,11 +120,13 @@ const subMenu = ref("layout-sub-menu");
     }
   }
   .index-banner {
-    height: calc(100% - 72px);
-    display: flex;
-    align-items: center;
-    .banner-container {
-      margin-left: 192px;
+    width: 1184px;
+    height: 576px;
+    background: url(@/assets/images/banner.png) no-repeat center / cover;
+    margin: 0 auto;
+    .banner-content {
+      padding-top: 216px;
+      padding-left: 50px;
       .banner-title {
         height: 48px;
         font-size: 40px;
@@ -148,7 +160,7 @@ const subMenu = ref("layout-sub-menu");
           opacity: 0.9;
         }
       }
-    };
+    }
   }
 }
 .index-bottom {
@@ -158,7 +170,8 @@ const subMenu = ref("layout-sub-menu");
   .intro-section {
     .intro-content {
       padding: 48px;
-      background: url(@/assets/images/img-qy-banner.png) no-repeat  center / cover;
+      background: url(@/assets/images/img-qy-banner.png) no-repeat center /
+        cover;
       .intro-text {
         height: 32px;
         font-size: 16px;
@@ -177,6 +190,7 @@ const subMenu = ref("layout-sub-menu");
         width: 580px;
         height: 168px;
         background: url(@/assets/images/img-1.png) no-repeat center / cover;
+        border-radius: 2px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -223,15 +237,17 @@ const subMenu = ref("layout-sub-menu");
   min-width: 128px;
   padding: 0 4px;
 }
-:global(.layout-sub-menu .ant-menu .ant-menu-item a) {
-  color: #0484d4;
+// :global(.layout-sub-menu .ant-menu .ant-menu-item a) {
+//   color: #0484d4;
+// }
+:global(.ant-menu .ant-menu-item:hover) {
+  color: #1890ff;
+  background: #e6f7ff;
+  border-radius: 2px;
 }
-:global(.layout-sub-menu .ant-menu .ant-menu-item:hover) {
-  background: #f0f2f5;
-}
-:global(.layout-sub-menu .ant-menu .ant-menu-item a:hover) {
-  color: #666666;
-}
+// :global(.layout-sub-menu .ant-menu .ant-menu-item a:hover) {
+//   color: #666666;
+// }
 :global(.layout-sub-menu .ant-menu .ant-menu-item .nav-svg) {
   margin-right: 2px;
   margin-left: -8px;

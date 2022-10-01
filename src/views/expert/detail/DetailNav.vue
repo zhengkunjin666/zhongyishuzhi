@@ -11,13 +11,19 @@
       <div class="nav-left">
         <a-menu v-model:selectedKeys="current" mode="horizontal">
           <a-menu-item key="index">
-            <router-link :to="{ path: `/expert/detail/index/${id}` }">基础信息</router-link>
+            <router-link :to="{ path: `/expert/detail/index/${id}` }"
+              >基础信息</router-link
+            >
           </a-menu-item>
           <a-menu-item key="skill">
-            <router-link :to="{ path: `/expert/detail/skill/${id}` }">标签信息</router-link>
+            <router-link :to="{ path: `/expert/detail/skill/${id}` }"
+              >标签信息</router-link
+            >
           </a-menu-item>
           <a-menu-item key="join">
-            <router-link :to="{ path: `/expert/detail/join/${id}` }">参与项目</router-link>
+            <router-link :to="{ path: `/expert/detail/join/${id}` }"
+              >参与项目</router-link
+            >
           </a-menu-item>
         </a-menu>
       </div>
@@ -52,11 +58,10 @@ const current = computed(() => {
   if (router.currentRoute.value.path.includes("/expert/detail/join")) {
     return ["join"];
   }
-})
+});
 onMounted(() => {
   id.value = router.currentRoute.value.params.id;
-  console.log(router.currentRoute.value)
-})
+});
 </script>
 
 <style lang="less" scoped>
@@ -65,7 +70,7 @@ onMounted(() => {
   background: #fff;
   .detail-nav {
     height: 60px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     padding: 0 24px 0 4px;
     display: flex;
     justify-content: space-between;
@@ -77,7 +82,7 @@ onMounted(() => {
         padding-top: 7.5px;
         border: none;
       }
-    };
+    }
     .nav-right {
       padding-top: 2px;
       display: flex;
@@ -90,18 +95,18 @@ onMounted(() => {
           font-size: 14px;
           font-family: PingFangSC-Regular, PingFang SC;
           margin-left: 4px;
-        };
+        }
         &:hover {
           color: #1890ff;
         }
-      };
+      }
       .nav-text {
         font-size: 14px;
-        color: rgba(0,0,0,0.45);
+        color: rgba(0, 0, 0, 0.45);
         margin-left: 6px;
       }
     }
-  };
+  }
   .detail-content {
     min-width: 870px;
   }

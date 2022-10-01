@@ -1,14 +1,6 @@
 <template>
-  <header class="expert-header">
-    <div class="header-left">
-      <router-link :to="{ path: '/' }" class="index-link">
-        <img
-          src="@/assets/images/logo-light.png"
-          alt="中国移动"
-          class="index-logo"
-        />
-      </router-link>
-    </div>
+  <header :class="['expert-header', dataMinWidth]">
+    <LayoutHeaderLeft />
     <div class="header-right">
       <LayoutNav :subMenu="subMenu" />
     </div>
@@ -42,10 +34,12 @@
 </template>
 
 <script setup>
+import LayoutHeaderLeft from "@/components/LayoutHeaderLeft.vue";
 import LayoutNav from "@/components/LayoutNav.vue";
 import { useRouter } from "vue-router";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 
+const dataMinWidth = ref("");
 const subMenu = ref("expert-sub-menu");
 const router = useRouter();
 const selectedKeys = computed(() => {
@@ -57,6 +51,22 @@ const selectedKeys = computed(() => {
   }
   return [router.currentRoute.value.path];
 });
+onMounted(() => getMinWidth());
+watch(
+  () => router.currentRoute.value.href,
+  () => getMinWidth()
+);
+const getMinWidth = () => {
+  if (router.currentRoute.value.href.includes("expert/data")) {
+    dataMinWidth.value = "data-min-width";
+  } else if (router.currentRoute.value.href.includes("list")) {
+    dataMinWidth.value = "list-min-width";
+  } else if (router.currentRoute.value.href.includes("detail")) {
+    dataMinWidth.value = "detail-min-width";
+  } else if (router.currentRoute.value.href.includes("enter")) {
+    dataMinWidth.value = "enter-min-width";
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -64,15 +74,24 @@ const selectedKeys = computed(() => {
   display: flex;
   flex-direction: column;
 }
+.data-min-width {
+  min-width: 1440px;
+}
+.list-min-width {
+  min-width: 1456px;
+}
+.detail-min-width {
+  min-width: 1126px;
+}
+.enter-min-width {
+  min-width: 1256px;
+}
 .expert-header {
   height: 72px;
   background: #fff;
   border-bottom: 1px solid #ebebeb;
   display: flex;
   align-items: center;
-  .header-left {
-    margin-left: 24px;
-  }
   .header-right {
     margin-left: 56px;
     .ant-menu-horizontal {
@@ -93,7 +112,7 @@ const selectedKeys = computed(() => {
     :deep(.ant-menu-vertical) {
       margin-top: 32px;
       border: none;
-    };
+    }
     .nav-link {
       margin-left: 10px;
       .svg-icon {
@@ -112,11 +131,17 @@ const selectedKeys = computed(() => {
   min-width: 128px;
   padding: 0 4px;
 }
+:global(.expert-sub-menu
+    .ant-menu.ant-menu-sub.ant-menu-vertical
+    .ant-menu-item-selected) {
+  border-radius: 2px;
+}
 :deep(.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected) {
   border-left: 2px solid;
 }
 :global(#app),
 :global(.page) {
   height: 100%;
+  background: #f0f3f5;
 }
 </style>

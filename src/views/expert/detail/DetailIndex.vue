@@ -78,7 +78,7 @@
               </div>
             </a-col>
             <a-col :span="7">
-              <div class="education-ti info-name">
+              <div class="work-year info-name">
                 工作年限：<span class="education-text info-text">{{
                   data.detailData.work_year
                 }}</span>
@@ -156,40 +156,39 @@
         >申请专家调用</a-button
       >
     </div>
+    <a-modal
+      v-model:visible="modalVisible"
+      title="系统建设中"
+      centered
+      :footer="null"
+    >
+      <p>如需调用专家请联系中移咨询协同拓展部</p>
+      <p>联系电话：13611020779</p>
+    </a-modal>
   </div>
 </template>
 
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Experts from "@/global/service/experts.js";
-import { message } from "ant-design-vue";
+import Images from "@/global/image/image.js";
 
 const data = reactive({
   detailData: {},
 });
+const modalVisible = ref(false);
 const router = useRouter();
 onMounted(() => {
   const id = router.currentRoute.value.params.id;
   Experts.getExpertDetail(id).then((res) => {
     data.detailData = res.data;
+    const index = id % Images.length;
+    data.detailData.avatar = Images[index];
   });
 });
-let timeout;
 const handleClick = () => {
-  if (!timeout) {
-    timeout = 1;
-    message.info({
-      content: () => "此功能正在建设中",
-      style: {
-        marginTop: "70px",
-      },
-      duration: 2,
-    });
-    setTimeout(() => {
-      timeout = 0;
-    }, 2000);
-  }
+  modalVisible.value = true;
 };
 </script>
 
@@ -293,6 +292,10 @@ const handleClick = () => {
           border-radius: 50%;
           background: #fafafa;
           margin-right: 16px;
+          .base-avatar {
+            width: 100%;
+            height: 100%;
+          }
         }
         .base-name {
           margin-bottom: 10px;
@@ -305,7 +308,7 @@ const handleClick = () => {
         min-width: 350px;
         .base-text-blue {
           color: #0484d4;
-        };
+        }
         .base-num {
           margin-bottom: 10px;
         }
