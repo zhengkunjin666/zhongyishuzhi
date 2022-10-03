@@ -38,7 +38,7 @@
                   <a-form-item label="专家姓名" name="name">
                     <a-input v-model:value="data.formState.name" />
                   </a-form-item>
-                  <a-form-item label="联系方式" name="telephone">
+                  <a-form-item label="手机号码" name="telephone">
                     <a-input v-model:value="data.formState.telephone" />
                   </a-form-item>
                 </a-col>

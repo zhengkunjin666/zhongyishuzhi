@@ -1,5 +1,5 @@
 <template>
-  <header :class="['expert-header', dataMinWidth]">
+  <header :class="['expert-header', headerMinWidth]">
     <LayoutHeaderLeft />
     <div class="header-right">
       <LayoutNav :subMenu="subMenu" />
@@ -27,7 +27,7 @@
         </a-menu-item>
       </a-menu>
     </div>
-    <div class="expert-right">
+    <div :class="['expert-right', dataMinWidth]">
       <router-view />
     </div>
   </main>
@@ -39,6 +39,7 @@ import LayoutNav from "@/components/LayoutNav.vue";
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted, watch } from "vue";
 
+const headerMinWidth = ref("");
 const dataMinWidth = ref("");
 const subMenu = ref("expert-sub-menu");
 const router = useRouter();
@@ -58,13 +59,17 @@ watch(
 );
 const getMinWidth = () => {
   if (router.currentRoute.value.href.includes("expert/data")) {
-    dataMinWidth.value = "data-min-width";
+    headerMinWidth.value = "data-min-width";
+    dataMinWidth.value = "data-right-min-width";
   } else if (router.currentRoute.value.href.includes("list")) {
-    dataMinWidth.value = "list-min-width";
+    headerMinWidth.value = "list-min-width";
+    dataMinWidth.value = "list-right-min-width";
   } else if (router.currentRoute.value.href.includes("detail")) {
-    dataMinWidth.value = "detail-min-width";
+    headerMinWidth.value = "detail-min-width";
+    dataMinWidth.value = "detail-right-min-width";
   } else if (router.currentRoute.value.href.includes("enter")) {
-    dataMinWidth.value = "enter-min-width";
+    headerMinWidth.value = "enter-min-width";
+    dataMinWidth.value = "enter-right-min-width";
   }
 };
 </script>
@@ -75,7 +80,7 @@ const getMinWidth = () => {
   flex-direction: column;
 }
 .data-min-width {
-  min-width: 1440px;
+  min-width: 1086px;
 }
 .list-min-width {
   min-width: 1456px;
@@ -85,6 +90,18 @@ const getMinWidth = () => {
 }
 .enter-min-width {
   min-width: 1256px;
+}
+.data-right-min-width {
+  min-width: 878px;
+}
+.list-right-min-width {
+  min-width: 1248px;
+}
+.detail-right-min-width {
+  min-width: 918px;
+}
+.enter-right-min-width {
+  min-width: 1048px;
 }
 .expert-header {
   height: 72px;
@@ -125,6 +142,7 @@ const getMinWidth = () => {
     flex: 1;
     padding: 24px;
     background: #f0f2f5;
+    overflow: hidden;
   }
 }
 :global(.expert-sub-menu .ant-menu.ant-menu-sub.ant-menu-vertical) {

@@ -158,6 +158,7 @@ const handleSubmit = (values) => {
   align-items: center;
   .project-container {
     width: 1200px;
+    min-width: 1000px;
     background: #fff;
     margin: 0 auto;
     .project-header {

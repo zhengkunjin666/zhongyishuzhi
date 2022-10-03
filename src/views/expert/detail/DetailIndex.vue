@@ -42,9 +42,9 @@
                     }}</span>
                   </p>
                   <p class="base-phone info-name">
-                    联系方式：<span class="base-text info-text">{{
-                      data.detailData.telephone
-                    }}</span>
+                    联系方式：<span class="base-text info-text"
+                      >电话-{{ data.detailData.telephone }}</span
+                    >
                   </p>
                 </div>
               </div>

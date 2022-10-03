@@ -271,7 +271,6 @@ const handleTableChange = (params) => {
 
 <style lang="less" scoped>
 .expert-sectiion {
-  min-width: 1200px;
   margin-top: 24px;
   background: #fff;
   .expert-top {

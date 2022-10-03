@@ -23,15 +23,95 @@
   <section class="expert-level">
     <h2 class="expert-level-title title">技能水平</h2>
     <div class="level-list">
-      <div class="level-item">
-        <div ref="levelLeft" style="height: 430px"></div>
+      <div class="level-item charts-container">
+        <div class="item-title">自评测评对比</div>
+        <div ref="levelLeft" style="width: 100%; height: 430px"></div>
       </div>
-      <div class="level-item">
-        <div ref="levelRight" style="height: 430px"></div>
+      <div class="level-item charts-container">
+        <div class="item-title">自评水平分布</div>
+        <div ref="levelRight" style="width: 100%; height: 430px"></div>
       </div>
     </div>
-    <div class="expert-list-img">
+    <!-- <div class="expert-list-img">
       <img src="@/assets/images/数据图.png" alt="" />
+    </div> -->
+  </section>
+  <section class="skill-distribution charts-container">
+    <h2 class="skill-distribution-title title">技能分布</h2>
+    <div class="distribution-item charts-item">
+      <div class="item-title">技能分布散点图</div>
+      <div ref="distribution" style="width: 100%; height: 500px"></div>
+    </div>
+  </section>
+  <section class="evaluation-trends charts-container">
+    <h2 class="evaluation-trends-title title">测评动态</h2>
+    <div class="distribution-item charts-item">
+      <div class="item-title">测评记录</div>
+      <div ref="trends" style="width: 100%; height: 500px"></div>
+    </div>
+  </section>
+  <section class="skill-level-distribution">
+    <h2 class="level-distribution-title title">技能级别分布</h2>
+    <div class="level-distribution-list">
+      <div class="level-distribution-item charts-container charts-item">
+        <div class="item-title">级别分布概览</div>
+        <div ref="levelDistribution" style="width: 100%; height: 750px"></div>
+      </div>
+      <div class="level-distribution-item charts-container charts-item">
+        <div class="item-title">级别分布详情</div>
+        <div class="level-distribution-table">
+          <a-table
+            :ref="levelDistributionTableRef"
+            :columns="levelDistributionColumns"
+            :row-key="(record) => record.stack_id"
+            :data-source="levelDistributionTableData"
+            :pagination="data.levelDistributionPagination"
+            size="small"
+            bordered
+            :scroll="{ x: 600 }"
+            class="ant-table-striped"
+            :row-class-name="
+              (_record, index) => (index % 2 === 1 ? 'table-striped' : null)
+            "
+            @change="handlelevelDistributionTableChange"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.dataIndex === 'name'">
+                <a :title="record.name">{{ record.name }}</a>
+              </template>
+            </template>
+          </a-table>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="department-skills">
+    <h2 class="department-skills-title title">部门技能分析</h2>
+    <div class="department-skills-list">
+      <div class="department-skills-item charts-container charts-item">
+        <div class="item-title">部门技能概览</div>
+        <div ref="departmentSkills" style="width: 100%; height: 700px"></div>
+      </div>
+      <div class="department-skills-item charts-container charts-item">
+        <div class="item-title">部门技能详情</div>
+        <div class="department-skills-table">
+          <a-table
+            :ref="departmentSkillsTableRef"
+            :columns="departmentSkillsColumns"
+            :row-key="(record) => record.stack_id"
+            :data-source="departmentSkillsTableData"
+            :pagination="data.departmentSkillsPagination"
+            size="small"
+            bordered
+            class="ant-table-striped"
+            :row-class-name="
+              (_record, index) => (index % 2 === 1 ? 'table-striped' : null)
+            "
+            @change="handledepartmentSkillsTableChange"
+          >
+          </a-table>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -40,6 +120,20 @@
 import { ref, reactive, onUpdated, onMounted } from "vue";
 //  按需引入 echarts
 import * as echarts from "echarts";
+import levelLeftData from "@/global/expertData/skill_contrast.js";
+import getBarOption from "@/global/echartData/getBarOption.js";
+import levelRightData from "@/global/expertData/skill_contrast_pie.js";
+import getPieOption from "@/global/echartData/getPieOption.js";
+import distributionData from "@/global/expertData/skill_eva_count.js";
+import getScatterOption from "@/global/echartData/getScatterOption.js";
+import trendsData from "@/global/expertData/skill_date.js";
+import getLineOption from "@/global/echartData/getLineOption.js";
+import levelDistributionData from "@/global/expertData/skill_overview.js";
+import getHorizontalBarOption from "@/global/echartData/getHorizontalBarOption.js";
+import departmentSkillsData from "@/global/expertData/department_overview.js";
+
+import levelDistributionTableData from "@/global/expertData/skill_detail.js";
+import departmentSkillsTableData from "@/global/expertData/department_list.js";
 
 const value = ref(null);
 const expertData = reactive([
@@ -64,125 +158,206 @@ const expertData = reactive([
 ]);
 const levelLeft = ref();
 const levelRight = ref();
+const distribution = ref();
+const trends = ref();
+const levelDistribution = ref();
+const departmentSkills = ref();
 let levelLeftChart;
 let levelRightChart;
+let distributionChart;
+let trendsChart;
+let levelDistributionChart;
+let departmentSkillsChart;
 onUpdated(
   (window.onresize = () => {
     levelLeftChart.resize();
     levelRightChart.resize();
+    distributionChart.resize();
+    trendsChart.resize();
+    levelDistributionChart.resize();
+    departmentSkillsChart.resize();
   })
 );
 onMounted(() => {
   levelLeftInit();
   levelRightInit();
+  distributionInit();
+  trendsInit();
+  levelDistributionInit();
+  departmentSkillsInit();
+  getLevelDistribution();
+  getdepartmentSkills();
 });
 const levelLeftInit = () => {
-  // 基于准备好的dom，初始化echarts实例
   levelLeftChart = echarts.init(levelLeft.value);
-  // 指定图表的配置项和数据
-  const option = {
-    title: {
-      text: "自评测评对比",
-    },
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        type: "cross",
-      },
-    },
-    legend: {
-      data: ["自评", "测评"],
-      icon: "circle",
-      top: "8%",
-    },
-    grid: {
-      top: "26%",
-      bottom: "7%",
-    },
-    xAxis: {
-      data: ["了解", "熟悉", "掌握", "精通", "专家"],
-      axisLabel: {
-        rotate: 45,
-      },
-    },
-    yAxis: [
-      {
-        name: "测评次数",
-      },
-      {
-        position: "left",
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: "#e0e6f1",
-          },
-        },
-      },
-      {
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: "#e0e6f1",
-          },
-        },
-      },
-    ],
-    series: [
-      {
-        name: "自评",
-        type: "bar",
-        data: [550, 350, 230, 90, 100],
-      },
-      {
-        name: "测评",
-        type: "bar",
-        data: [1100, 120, 20, 20, 30],
-      },
-    ],
-  };
-  // 使用刚指定的配置项和数据显示图表。
+  const option = getBarOption(levelLeftData.params, levelLeftData.config);
   levelLeftChart.setOption(option);
 };
 const levelRightInit = () => {
-  // 基于准备好的dom，初始化echarts实例
   levelRightChart = echarts.init(levelRight.value);
-  // 指定图表的配置项和数据
-  const option = {
-    title: {
-      text: "自评水平分布",
-    },
-    legend: {
-      icon: "circle",
-      top: "8%",
-    },
-    tooltip: {
-      formatter: function (params) {
-        return `<p style="height:10px;">${params.marker}${params.name}</p>
-                <p style="height:10px;">占比：${params.percent}%</p>
-                <p style="height:10px;">数值：${params.value}</p>
-              `;
-      },
-    },
-    series: [
-      {
-        name: "level",
-        type: "pie",
-        radius: [30, 150],
-        center: ["50%", "50%"],
-        roseType: "area",
-        top: "20%",
-        data: [
-          { value: 1100, name: "了解" },
-          { value: 120, name: "熟悉" },
-          { value: 20, name: "掌握" },
-          { value: 20, name: "精通" },
-          { value: 30, name: "专家" },
-        ],
-      },
-    ],
-  };
-  // 使用刚指定的配置项和数据显示图表。
+  const option = getPieOption(levelRightData.params, levelRightData.config);
   levelRightChart.setOption(option);
+};
+const distributionInit = () => {
+  distributionChart = echarts.init(distribution.value);
+  const option = getScatterOption(
+    distributionData.params,
+    distributionData.config
+  );
+  distributionChart.setOption(option);
+};
+const trendsInit = () => {
+  trendsChart = echarts.init(trends.value);
+  const option = getLineOption(trendsData.params, trendsData.config);
+  trendsChart.setOption(option);
+};
+const levelDistributionInit = () => {
+  levelDistributionChart = echarts.init(levelDistribution.value);
+  const option = getHorizontalBarOption(
+    levelDistributionData.params,
+    levelDistributionData.config
+  );
+  levelDistributionChart.setOption(option);
+};
+const departmentSkillsInit = () => {
+  departmentSkillsChart = echarts.init(departmentSkills.value);
+  const option = getBarOption(
+    departmentSkillsData.params,
+    departmentSkillsData.config
+  );
+  departmentSkillsChart.setOption(option);
+};
+const data = reactive({
+  levelDistributionPagination: {},
+  departmentSkillsPagination: {},
+});
+const levelDistributionTableRef = ref(null);
+const departmentSkillsTableRef = ref(null);
+const levelDistributionColumns = [
+  {
+    title: "技能名称",
+    dataIndex: "name",
+    ellipsis: true,
+  },
+  {
+    title: "测评人数",
+    dataIndex: "total",
+    width: "15%",
+    sorter: {
+      compare: (a, b) => a.total - b.total,
+    },
+  },
+  {
+    title: "了解",
+    dataIndex: "level_1",
+  },
+  {
+    title: "熟悉",
+    dataIndex: "level_2",
+  },
+  {
+    title: "掌握",
+    dataIndex: "level_3",
+  },
+  {
+    title: "精通",
+    dataIndex: "level_4",
+  },
+  {
+    title: "专家",
+    dataIndex: "level_5",
+  },
+  {
+    title: "总技能力",
+    dataIndex: "total_score",
+    width: "15%",
+    sorter: {
+      compare: (a, b) => a.total_score - b.total_score,
+    },
+  },
+];
+const getLevelDistribution = () => {
+  const total = levelDistributionTableData.length;
+  const current = 1;
+  const pageSize = Number(20);
+  const showQuickJumper = true;
+  const showSizeChanger = false;
+  const showTotal = (total) => `共 ${total} 条`;
+  data.levelDistributionPagination = {
+    total,
+    current,
+    pageSize,
+    showQuickJumper,
+    showSizeChanger,
+    showTotal,
+  };
+};
+const handlelevelDistributionTableChange = (params) => {
+  data.levelDistributionPagination.current = params.current;
+  data.levelDistributionPagination.pageSize = Number(params.pageSize);
+};
+const departmentSkillsColumns = [
+  {
+    title: "部门名称",
+    dataIndex: "departments_name",
+    ellipsis: true,
+  },
+  {
+    title: "测评次数",
+    dataIndex: "total",
+    width: "15%",
+    sorter: {
+      compare: (a, b) => a.total - b.total,
+    },
+  },
+  {
+    title: "了解",
+    dataIndex: "level_1",
+  },
+  {
+    title: "熟悉",
+    dataIndex: "level_2",
+  },
+  {
+    title: "掌握",
+    dataIndex: "level_3",
+  },
+  {
+    title: "精通",
+    dataIndex: "level_4",
+  },
+  {
+    title: "专家",
+    dataIndex: "level_5",
+  },
+  {
+    title: "总技能力",
+    dataIndex: "total_score",
+    width: "15%",
+    sorter: {
+      compare: (a, b) => a.total_score - b.total_score,
+    },
+  },
+];
+const getdepartmentSkills = () => {
+  const total = departmentSkillsTableData.length;
+  const current = 1;
+  const pageSize = Number(20);
+  const showQuickJumper = true;
+  const showSizeChanger = false;
+  const showTotal = (total) => `共 ${total} 条`;
+  data.departmentSkillsPagination = {
+    total,
+    current,
+    pageSize,
+    showQuickJumper,
+    showSizeChanger,
+    showTotal,
+  };
+};
+const handledepartmentSkillsTableChange = (params) => {
+  data.departmentSkillsPagination.current = params.current;
+  data.departmentSkillsPagination.pageSize = Number(params.pageSize);
 };
 </script>
 
@@ -201,12 +376,17 @@ const levelRightInit = () => {
   line-height: 32px;
   margin-bottom: 16px;
 }
+.item-title {
+  margin-bottom: 10px;
+}
 .expert-data {
-  min-width: 830px;
   margin-top: 30px;
+  display: flex;
+  flex-direction: column;
   .expert-data-list {
     display: flex;
     flex-wrap: wrap;
+    flex: 1;
 
     .expert-data-item {
       width: calc(100% / 4 - 15px);
@@ -256,6 +436,14 @@ const levelRightInit = () => {
     }
   }
 }
+.charts-container:hover {
+  z-index: 2;
+  box-shadow: 5px 20px 30px rgb(0 0 0 / 10%);
+}
+.charts-item {
+  background: #fff;
+  padding: 20px;
+}
 .expert-level {
   .level-list {
     display: flex;
@@ -271,11 +459,38 @@ const levelRightInit = () => {
     }
   }
 }
-.expert-list-img {
-  margin-top: 24px;
+.skill-distribution,
+.skill-level-distribution {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.level-distribution-list {
   display: flex;
-  img {
-    flex: 1;
+  .level-distribution-item {
+    width: 50%;
+    background: #fff;
+    padding: 20px;
+    margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
   }
+}
+.department-skills-item {
+  margin-top: 20px;
+}
+:deep(.ant-table-small .ant-table-thead > tr > th) {
+  background-color: #fff;
+  font-size: 12px;
+}
+.ant-table-striped {
+  height: 750px;
+}
+.ant-table-striped :deep(.table-striped) td {
+  background-color: #fafafa;
+  font-size: 12px;
+}
+:deep(.ant-table.ant-table-small .ant-table-tbody > tr > td) {
+  padding: 6px 8px;
 }
 </style>
