@@ -1,13 +1,15 @@
 <template>
   <div class="index-top">
     <div class="index-header">
-      <div class="header-left">
-        <router-link :to="{ path: '/' }" class="index-link">
-          <svg-icon svgClass="index-logo" svgName="indexLogo"></svg-icon>
-        </router-link>
-      </div>
-      <div class="header-right">
-        <LayoutNav :subMenu="subMenu" />
+      <div class="header-container">
+        <div class="header-left">
+          <router-link :to="{ path: '/' }" class="index-link">
+            <svg-icon svgClass="index-logo" svgName="indexLogo"></svg-icon>
+          </router-link>
+        </div>
+        <div class="header-right">
+          <LayoutNav :subMenu="subMenu" />
+        </div>
       </div>
     </div>
     <div class="index-banner">
@@ -70,49 +72,52 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .index-top {
-  min-width: 1184px;
-  background: linear-gradient(90deg, #001377 0%, #000078 100%);
+  min-width: 1440px;
+  background: #000078;
   position: relative;
   .index-header {
     width: 100%;
-    height: 72px;
     background: rgba(0, 0, 0, 0.45);
     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: center;
     position: absolute;
     top: 0;
     left: 0;
-    .header-left {
-      margin-left: 128px;
-      .index-logo {
-        width: 272px;
-        height: 38px;
+    .header-container {
+      width: 1184px;
+      height: 72px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      .header-left {
+        .index-logo {
+          width: 272px;
+          height: 38px;
+        }
       }
-    }
-    .header-right {
-      margin-left: 36px;
-      .ant-menu {
-        background: none;
-        border: 0;
-        :deep(.ant-menu-item),
-        :deep(.ant-menu-submenu) {
-          height: 71px;
-          line-height: 71px;
-          color: rgba(255, 255, 255, 0.85);
-          a {
+      .header-right {
+        margin-left: 36px;
+        .ant-menu {
+          background: none;
+          border: 0;
+          :deep(.ant-menu-item),
+          :deep(.ant-menu-submenu) {
+            height: 71px;
+            line-height: 71px;
             color: rgba(255, 255, 255, 0.85);
-          }
-          &.ant-menu-item-selected,
-          &.ant-menu-item-active,
-          &.ant-menu-submenu-active,
-          &.ant-menu-submenu-open {
-            a,
-            .ant-menu-submenu-title {
-              color: #fff;
+            a {
+              color: rgba(255, 255, 255, 0.85);
             }
-            &::after {
-              border-bottom: 2px solid #fff;
+            &.ant-menu-item-selected,
+            &.ant-menu-item-active,
+            &.ant-menu-submenu-active,
+            &.ant-menu-submenu-open {
+              a,
+              .ant-menu-submenu-title {
+                color: #fff;
+              }
+              &::after {
+                border-bottom: 2px solid #fff;
+              }
             }
           }
         }
@@ -120,8 +125,9 @@ onMounted(() => {
     }
   }
   .index-banner {
-    width: 1184px;
+    width: 1440px;
     height: 576px;
+    padding-left: 128px;
     background: url(@/assets/images/banner.png) no-repeat center / cover;
     margin: 0 auto;
     .banner-content {
@@ -164,7 +170,8 @@ onMounted(() => {
   }
 }
 .index-bottom {
-  width: 1184px;
+  width: 1440px;
+  padding: 0 128px;
   margin: 40px auto;
   padding-bottom: 32px;
   .intro-section {
