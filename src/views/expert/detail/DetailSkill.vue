@@ -14,11 +14,11 @@
       </div>
     </div>
     <div class="detail-skill-bottom">
-      <img v-if="id == 1" src="@/assets/images/个人静态图-1.png" alt="" />
-      <img v-else-if="id == 2" src="@/assets/images/个人静态图-2.png" alt="" />
-      <img v-else-if="id == 3" src="@/assets/images/个人静态图-3.png" alt="" />
-      <img v-else-if="id == 4" src="@/assets/images/个人静态图-4.png" alt="" />
-      <img v-else src="@/assets/images/个人静态图-5.png" alt="" />
+      <img v-if="id == 1" src="@/assets/images/personal-1.png" alt="" />
+      <img v-else-if="id == 2" src="@/assets/images/personal-2.png" alt="" />
+      <img v-else-if="id == 3" src="@/assets/images/personal-3.png" alt="" />
+      <img v-else-if="id == 4" src="@/assets/images/personal-4.png" alt="" />
+      <img v-else src="@/assets/images/personal-1.png" alt="" />
     </div>
   </div>
 </template>
@@ -79,6 +79,12 @@ onMounted(() => {
         line-height: 20px;
         margin-bottom: 0px;
       }
+    }
+  };
+  .detail-skill-bottom {
+    width: 820px;
+    img {
+      width: 100%;
     }
   }
 }
