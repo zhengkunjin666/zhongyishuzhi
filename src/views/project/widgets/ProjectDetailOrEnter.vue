@@ -17,7 +17,7 @@
             <left-outlined />
             <span class="header-link-text">返回</span>
           </router-link>
-          <span class="header-text">参与项目（上个页面）</span>
+          <span class="header-text">参与项目</span>
         </div>
       </div>
       <div class="project-body">
