@@ -1,12 +1,12 @@
 export default {
   params: [
     {
-      total: 1321,
-      level_1: 1102,
-      level_2: 130,
-      level_3: 26,
-      level_4: 25,
-      level_5: 38,
+      total: 806,
+      level_1: 341,
+      level_2: 186,
+      level_3: 155,
+      level_4: 93,
+      level_5: 31,
     },
   ],
   config: {

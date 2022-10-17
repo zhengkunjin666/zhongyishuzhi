@@ -32,8 +32,8 @@
           <a-row :gutter="70">
             <a-col :span="7">
               <div class="base-left">
-                <div class="img-container">
-                  <img class="base-avatar" :src="data.detailData.avatar" />
+                <div class="firstLetter-container">
+                  <span class="first-letter">{{ firstLetter }}</span>
                 </div>
                 <div class="base-info">
                   <p class="base-name info-name">
@@ -172,19 +172,20 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Experts from "@/global/service/experts.js";
-import Images from "@/global/image/image.js";
+import { pinyin } from "pinyin-pro";
 
 const data = reactive({
   detailData: {},
 });
+const firstLetter = ref("");
 const modalVisible = ref(false);
 const router = useRouter();
 onMounted(() => {
   const id = router.currentRoute.value.params.id;
   Experts.getExpertDetail(id).then((res) => {
     data.detailData = res.data;
-    const index = id % Images.length;
-    data.detailData.avatar = Images[index];
+    const firstLetterArr = pinyin(data.detailData.name, { pattern: "first", toneType: "none", type: "array" });
+    firstLetter.value = firstLetterArr[0].toLocaleUpperCase();
   });
 });
 const handleClick = () => {
@@ -286,15 +287,19 @@ const handleClick = () => {
         min-width: 300px;
         display: flex;
         align-items: center;
-        .img-container {
+        .firstLetter-container {
           width: 56px;
           height: 56px;
+          text-align: center;
+          line-height: 56px;
           border-radius: 50%;
-          background: #fafafa;
+          background: #0484D4;
           margin-right: 16px;
-          .base-avatar {
-            width: 100%;
-            height: 100%;
+          .first-letter {
+            font-size: 32px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #FFFFFF;
           }
         }
         .base-name {

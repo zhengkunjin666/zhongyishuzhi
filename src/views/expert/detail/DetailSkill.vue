@@ -3,7 +3,7 @@
     <div class="detail-skill-top">
       <div class="skill-expert-container">
         <div class="expert-left">
-          <img :src="data.detailData.avatar" />
+            <span class="first-letter">{{ firstLetter }}</span>
         </div>
         <div class="expert-right">
           <p class="expert-name">{{ data.detailData.name }}</p>
@@ -27,19 +27,20 @@
 import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import Experts from "@/global/service/experts.js";
-import Images from "@/global/image/image.js";
+import { pinyin } from "pinyin-pro";
 
 const data = reactive({
   detailData: {},
 });
+const firstLetter = ref("");
 const id = ref(null);
 const router = useRouter();
 onMounted(() => {
   id.value = router.currentRoute.value.params.id;
   Experts.getExpertDetail(id.value).then((res) => {
     data.detailData = res.data;
-    const index = id.value % Images.length;
-    data.detailData.avatar = Images[index];
+    const firstLetterArr = pinyin(data.detailData.name, { pattern: "first", toneType: "none", type: "array" });
+    firstLetter.value = firstLetterArr[0].toLocaleUpperCase();
   });
 });
 </script>
@@ -58,9 +59,17 @@ onMounted(() => {
       .expert-left {
         width: 70px;
         height: 70px;
+        text-align: center;
+        line-height: 70px;
         border-radius: 50%;
-        background: #fafafa;
+        background: #0484D4;
         margin-right: 16px;
+        .first-letter {
+          font-size: 40px;
+          font-family: PingFangSC-Medium, PingFang SC;
+          font-weight: 500;
+          color: #FFFFFF;
+        }
       }
       .expert-name {
         height: 28px;
@@ -69,6 +78,7 @@ onMounted(() => {
         font-weight: 500;
         line-height: 28px;
         margin-bottom: 6px;
+        
       }
       .expert-skill {
         height: 20px;

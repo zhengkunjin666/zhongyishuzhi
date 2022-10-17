@@ -45,7 +45,7 @@ const columns = [
     dataIndex: "status_desc",
   },
   {
-    title: "已确认工作时长",
+    title: "已确认工作时长（周）",
     dataIndex: "work_hours",
   },
   {

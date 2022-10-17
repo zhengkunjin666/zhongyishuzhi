@@ -17,6 +17,7 @@
     "echarts": "^5.4.0",
     "fs": "^0.0.1-security",
     "nprogress": "^0.2.0",
+    "pinyin-pro": "^3.11.0",
     "unplugin-vue-components": "^0.22.7",
     "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.2.37",

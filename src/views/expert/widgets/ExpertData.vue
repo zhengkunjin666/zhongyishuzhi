@@ -32,9 +32,6 @@
         <div ref="levelRight" style="width: 100%; height: 430px"></div>
       </div>
     </div>
-    <!-- <div class="expert-list-img">
-      <img src="@/assets/images/数据图.png" alt="" />
-    </div> -->
   </section>
   <section class="skill-distribution charts-container">
     <h2 class="skill-distribution-title title">技能分布</h2>
@@ -90,7 +87,7 @@
     <div class="department-skills-list">
       <div class="department-skills-item charts-container charts-item">
         <div class="item-title">部门技能概览</div>
-        <div ref="departmentSkills" style="width: 100%; height: 700px"></div>
+        <div ref="departmentSkills" style="width: 100%; height: 430px"></div>
       </div>
       <div class="department-skills-item charts-container charts-item">
         <div class="item-title">部门技能详情</div>
@@ -103,6 +100,7 @@
             :pagination="data.departmentSkillsPagination"
             size="small"
             bordered
+            :scroll="{ x: 600 }"
             class="ant-table-striped"
             :row-class-name="
               (_record, index) => (index % 2 === 1 ? 'table-striped' : null)
@@ -476,21 +474,32 @@ const handledepartmentSkillsTableChange = (params) => {
     }
   }
 }
-.department-skills-item {
-  margin-top: 20px;
+.department-skills-list {
+  display: flex;
+  .department-skills-item {
+    width: 50%;
+    background: #fff;
+    padding: 20px;
+    margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }
 :deep(.ant-table-small .ant-table-thead > tr > th) {
   background-color: #fff;
-  font-size: 12px;
+  font-size: 13px;
 }
-.ant-table-striped {
-  height: 750px;
+:deep(.ant-table.ant-table-bordered>.ant-table-container>.ant-table-content>table>tbody>tr>td) {
+  font-size: 13px;
 }
 .ant-table-striped :deep(.table-striped) td {
   background-color: #fafafa;
-  font-size: 12px;
 }
 :deep(.ant-table.ant-table-small .ant-table-tbody > tr > td) {
   padding: 6px 8px;
+}
+:deep(.ant-table-pagination.ant-pagination) {
+  margin-bottom: 0;
 }
 </style>
